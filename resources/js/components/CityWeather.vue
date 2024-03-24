@@ -68,7 +68,7 @@ onMounted(() => getWeather())
             Ciutat: {{ cityWeather['name'] }} ({{ cityWeather['province'] }})
         </div>
         
-            <div class="flex" v-for="valuePrediction, key in cityWeather['prediction']" :key="key">
+            <div class="flex overflow-x-auto" v-for="valuePrediction, key in cityWeather['prediction']" :key="key">
                 <div class="m-5" v-for="predition, key1 in valuePrediction" :key="key1">
                     <div v-if="key1 == 'day'">
                         <ul class="list-disc list-inside m-2">
@@ -157,7 +157,6 @@ onMounted(() => getWeather())
                     </div>
                 </div>
                 <br>
-                <hl/>
             </div>
     </div>
     <div v-else-if="Object.keys(cityWeather).length == 0">

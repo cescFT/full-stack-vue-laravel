@@ -9,11 +9,17 @@ use Cache;
 
 class WeatherController extends Controller
 {
+    /** 
+     * Aquesta funció és la que la vista que renderitza la predicció meteorològica recuperi la informació de l'AEMET.
+     * He utilitzat una cache llarga de 30 minuts, ja que el valor serà vàlid perquè no estan tot el temps actualitzant la informació
+     * 
+     * El que fa basicament aquest endpoint és agafar l'id de ciutat i buscar-la per la base de dades, recupera el codi de la ciutat i la api key per a tirar el curl
+     * i finalment retorna aquesta informació
+     */
     public function getWeatherFromCity($cityId)
     {
         $itemCached = Cache::get($cityId . '-city');
-        if ($itemCached) {
-            error_log('loaded from cache');
+        if (!empty($itemCached)) {
             return response($itemCached, 200);
         }
 
@@ -21,6 +27,9 @@ class WeatherController extends Controller
             ->where('id', $cityId)
             ->get();
         
+        if (empty($city)) {
+            return response(json_encode([]), 200);
+        }
         
         $cityCode = $city[0]->city_code;
         
@@ -53,9 +62,8 @@ class WeatherController extends Controller
             $result = json_encode([]);
         } else {
             $result = $responseOfWeather->getBody()->getContents();
-            Cache::put($city[0]->id . '-city', $result, 120);
+            Cache::put($city[0]->id . '-city', $result, 30);
         }
-        error_log('loaded from api');
         return response($result, 200);
     }
 }

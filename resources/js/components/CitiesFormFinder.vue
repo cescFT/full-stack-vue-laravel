@@ -2,7 +2,7 @@
 
     <div class="p-3">
         <div class="m-1">
-            Al seguent formulari busca el teu municipi i al donar-li a buscar et trobarà el temps que hi ha ara!
+            Al seguent formulari busca el teu municipi i al donar-li a buscar veuras la predicció meteorològica!
         </div>
         <div class="flex mb-3">   
             <input type="text" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" name="cityToFind" id="cityToFind" placeholder="Busca el teu municipi...">
@@ -23,6 +23,11 @@ export default {
             searchCities() {
                 const textSearched = document.querySelector('#cityToFind');
                 const cityResultDiv = document.querySelector('#citiesResult');
+
+                if (!textSearched.value) {
+                    alert('Busca algun poble o ciutat!');
+                    return;
+                }
 
                 fetch('/fetchCityByName/' + textSearched.value, {method: 'GET'})
                 .then(response => response.json())
